@@ -1,0 +1,64 @@
+#!/bin/bash
+
+### MAKE SYMBOLIC LINKS ###
+
+# Remove or back up any old version of a file.
+handle_old_version() {
+    # Check if the file already exists.
+    if [ -e $1 ]
+    then
+        # If it's a symbolic link, just delete it -- the actual data is safely
+        # stored somewhere else.
+        if [ -L $1 ]
+        then
+            echo "Overwriting old symlink at $1"
+            rm $1
+        # If the file actually has information in it, back it up.
+        else
+            echo "Moving old $1 to $1-old"
+            mv $1 "$1-old"
+        fi
+    fi
+}
+
+config_dir=$(dirname $(readlink -f $0))
+
+for config_file in "vimrc" "tmux.conf" "zshrc"
+do
+    echo "Creating symlink for $config_file"
+    handle_old_version "$HOME/.$config_file"
+    ln -s "$config_dir/$config_file" "$HOME/.$config_file"
+done
+
+### CHECK FOR INSTALLED PROGRAMS ###
+
+command_exists () {
+    type $1 &> /dev/null
+}
+
+count=0
+for program in "vim" "tmux" "zsh"
+do
+    if ! command_exists $program
+    then
+        missing_progs[count]=$program
+        count=$((count+1))
+    fi
+done
+
+if [ ${#missing_progs[*]} -ne 0 ]
+then
+    echo "You're missing the following programs:"
+    for prog in ${missing_progs[*]}
+    do
+        echo "    $prog"
+    done
+
+    if command_exists apt-get
+    then
+        echo "You can install them by typing:"
+        echo "sudo apt-get install ${missing_progs[*]}"
+    else
+        echo "no apt"
+    fi
+fi
