@@ -58,7 +58,5 @@ then
     then
         echo "You can install them by typing:"
         echo "sudo apt-get install ${missing_progs[*]}"
-    else
-        echo "no apt"
     fi
 fi
