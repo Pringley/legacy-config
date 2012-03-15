@@ -14,3 +14,6 @@ cdpath=( ~ )
 
 # allow comments in interactive mode (begin with a #)
 setopt interactivecomments
+
+# keep things quiet -- don't beep
+setopt no_beep
