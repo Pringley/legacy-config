@@ -1,4 +1,4 @@
-PROMPT='%~$ '
+PROMPT='%~> '
 
 export EDITOR='vim'
 
