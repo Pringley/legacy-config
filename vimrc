@@ -85,9 +85,12 @@ function! WinMove(key)
         exec "wincmd ".a:key
     endif
 endfunction
-map <leader>h :call WinMove('h')<cr>
-map <leader>k :call WinMove('k')<cr>
-map <leader>l :call WinMove('l')<cr>
-map <leader>j :call WinMove('j')<cr>
+map <C-h> :call WinMove('h')<cr>
+map <C-k> :call WinMove('k')<cr>
+map <C-l> :call WinMove('l')<cr>
+map <C-j> :call WinMove('j')<cr>
 
-let g:vimwiki_list = [{'path':'~/Documents/vimwiki/','ext':'.txt'},{'path':'~/Documents/rp/psi/', 'path_html':'~/Documents/rp/psi_html/', 'ext':'.txt'}]
+" Back up after closing tags
+inoremap <C-b> <C-o>O
+
+let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dropbox/rp/psi/', 'path_html':'~/Dropbox/rp/psi_html/', 'ext':'.wiki'}]
