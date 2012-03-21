@@ -93,4 +93,9 @@ map <C-j> :call WinMove('j')<cr>
 " Back up after closing tags
 inoremap <C-b> <C-o>O
 
+nmap <C-@> 0f[lrX
+
+" Auto reload vimrc
+au BufWritePost .vimrc so ~/.vimrc
+
 let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dropbox/rp/psi/', 'path_html':'~/Dropbox/rp/psi_html/', 'ext':'.wiki'}]
