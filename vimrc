@@ -93,7 +93,7 @@ map <C-j> :call WinMove('j')<cr>
 " Back up after closing tags
 inoremap <C-b> <C-o>O
 
-nmap <C-@> 0f[lrX
+nmap <C-@> 0f(lrX
 
 " Auto reload vimrc
 au BufWritePost .vimrc so ~/.vimrc
