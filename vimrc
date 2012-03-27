@@ -1,13 +1,13 @@
-" Use simultaneous JK to return to normal mode
-" instead of escape.
-inoremap jk <esc>
-inoremap kj <esc>
+" Auto reload vimrc when changed
+au BufWritePost .vimrc so ~/.vimrc
+au BufWritePost vimrc so ~/.vimrc
+
+"""""""""""""""""""""
+"" EDITOR SETTINGS ""
+"""""""""""""""""""""
 
 " Backspace through everything
 set backspace=indent,eol,start
-
-" Remap the leader to ,
-let mapleader = ","
 
 " Use normal tab-completion (not automatically use first one)
 set wildmode=longest:full
@@ -45,30 +45,28 @@ set mouse=a
 " Show how far through the file we are.
 set ruler
 
-" Turn off filetype for Vundle
-filetype off
+" Use buffers
+set hidden
 
-" Enable Vundle
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-Bundle 'gmarik/vundle'
+"""""""""""""""""""""
+"" PERSONAL TWEAKS ""
+"""""""""""""""""""""
 
-" Show tags with :TlistToggle
-Bundle 'taglist.vim'
+" Remap the leader to ,
+let mapleader = ","
 
-" Access personal with with <leader>ww
-Bundle 'vimwiki'
+" Use simultaneous JK to return to normal mode
+" instead of escape.
+inoremap jk <esc>
+inoremap kj <esc>
 
-" Syntax highlighting for Markdown
-Bundle "plasticboy/vim-markdown"
+" Back up after closing tags
+inoremap <C-b> <C-o>O
 
-" Git shortcuts so good, they should be illegal
-Bundle "fugitive.vim"
+" Check off todo items ( ) --> (X) with <C-space>
+nmap <C-@> 0f(lrX
 
-" Filetype-based autoindenting.
-filetype plugin indent on
-
-" Window management
+" Window/split management
 function! WinMove(key)
     let t:curwin = winnr()
 
@@ -85,17 +83,29 @@ function! WinMove(key)
         exec "wincmd ".a:key
     endif
 endfunction
-map <C-h> :call WinMove('h')<cr>
-map <C-k> :call WinMove('k')<cr>
-map <C-l> :call WinMove('l')<cr>
-map <C-j> :call WinMove('j')<cr>
+map <leader>h :call WinMove('h')<cr>
+map <leader>k :call WinMove('k')<cr>
+map <leader>l :call WinMove('l')<cr>
+map <leader>j :call WinMove('j')<cr>
 
-" Back up after closing tags
-inoremap <C-b> <C-o>O
+"""""""""""""
+"" PLUGINS ""
+"""""""""""""
 
-nmap <C-@> 0f(lrX
+" Turn off filetype for Vundle
+filetype off
 
-" Auto reload vimrc
-au BufWritePost .vimrc so ~/.vimrc
+" Enable Vundle
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
 
+" Access personal wiki with with <leader>ww
+Bundle 'vimwiki'
 let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dropbox/rp/psi/', 'path_html':'~/Dropbox/rp/psi_html/', 'ext':'.wiki'}]
+
+" Git shortcuts so good, they should be illegal
+Bundle "fugitive.vim"
+
+" Filetype-based autoindenting.
+filetype plugin indent on
