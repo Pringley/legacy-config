@@ -45,9 +45,6 @@ set mouse=a
 " Show how far through the file we are.
 set ruler
 
-" Use buffers
-set hidden
-
 """""""""""""""""""""
 "" PERSONAL TWEAKS ""
 """""""""""""""""""""
@@ -59,9 +56,6 @@ let mapleader = ","
 " instead of escape.
 inoremap jk <esc>
 inoremap kj <esc>
-
-" Back up after closing tags
-inoremap <C-b> <C-o>O
 
 " Check off todo items ( ) --> (X) with <C-space>
 nmap <C-@> 0f(lrX
@@ -102,10 +96,44 @@ Bundle 'gmarik/vundle'
 
 " Access personal wiki with with <leader>ww
 Bundle 'vimwiki'
-let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dropbox/rp/psi/', 'path_html':'~/Dropbox/rp/psi_html/', 'ext':'.wiki'}]
+let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dropbox/rp/psi/', 'path_html':'~/Dropbox/rp/psi/html/', 'ext':'.wiki'}]
 
 " Git shortcuts so good, they should be illegal
-Bundle "fugitive.vim"
+Bundle 'fugitive.vim'
+
+" CtrlP file finding
+Bundle 'ctrlp.vim'
+
+let g:ctrlp_working_path_mode = 2
+
+let g:path_to_matcher = "~/bin/matcher"
+
+let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files . -co --exclude-standard']
+
+let g:ctrlp_match_func = { 'match': 'GoodMatch' }
+
+function! GoodMatch(items, str, limit, mmode, ispath, crfile, regex)
+
+  " Create a cache file if not yet exists
+  let cachefile = ctrlp#utils#cachedir().'/matcher.cache'
+  if !( filereadable(cachefile) && a:items == readfile(cachefile) )
+    call writefile(a:items, cachefile)
+  endif
+  if !filereadable(cachefile)
+    return []
+  endif
+
+  " a:mmode is currently ignored. In the future, we should probably do
+  " something about that. the matcher behaves like "full-line".
+  let cmd = g:path_to_matcher.' --limit '.a:limit.' --manifest '.cachefile.' '
+  if !( exists('g:ctrlp_dotfiles') && g:ctrlp_dotfiles )
+    let cmd = cmd.'--no-dotfiles '
+  endif
+  let cmd = cmd.a:str
+
+  return split(system(cmd), "\n")
+
+endfunction
 
 " Filetype-based autoindenting.
 filetype plugin indent on
