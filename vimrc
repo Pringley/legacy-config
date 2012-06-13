@@ -37,13 +37,19 @@ set autoindent
 set smartindent
 
 " Activate syntax highlighting.
-syntax enable
+" syntax enable
 
 " Add mouse support in xterms.
 set mouse=a
 
 " Show how far through the file we are.
 set ruler
+
+" Filetype-based autoindenting.
+" filetype plugin indent on
+
+" Timeout quickly for key bindings.
+set timeoutlen=250
 
 """""""""""""""""""""
 "" PERSONAL TWEAKS ""
@@ -56,9 +62,32 @@ let mapleader = ","
 " instead of escape.
 inoremap jk <esc>
 inoremap kj <esc>
+vnoremap jk <esc>
+vnoremap kj <esc>
+
+" Use semicolon to enter command mode.
+map ; :
 
 " Check off todo items ( ) --> (X) with <C-space>
-nmap <C-@> 0f(lrX
+map <leader><space> 0f(lrX
+
+map <leader>sp ggO#!/usr/bin/env python<cr><esc>j
+map <leader>sb ggO#!/bin/bash<cr><esc>j
+
+function! SetShebang()
+    if(match(getline(1) , '^\#!') == 0)
+        execute("let b:interpreter = getline(1)[2:]")
+    endif
+endfunction
+
+function! CallInterpreter()
+    call SetShebang()
+    if exists("b:interpreter")
+         exec ("w|!".b:interpreter." %")
+    endif
+endfunction
+
+map <leader>e :call CallInterpreter()<cr>
 
 " Window/split management
 function! WinMove(key)
@@ -101,6 +130,9 @@ let g:vimwiki_list = [{'path':'~/Dropbox/vimwiki/','ext':'.wiki'},{'path':'~/Dro
 " Git shortcuts so good, they should be illegal
 Bundle 'fugitive.vim'
 
+" Syntax checking!
+Bundle 'scrooloose/syntastic'
+
 " CtrlP file finding
 Bundle 'ctrlp.vim'
 
@@ -135,5 +167,5 @@ function! GoodMatch(items, str, limit, mmode, ispath, crfile, regex)
 
 endfunction
 
-" Filetype-based autoindenting.
-filetype plugin indent on
+" Re-enable filetype
+" filetype plugin indent on
